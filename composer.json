@@ -1,0 +1,26 @@
+{
+  "name": "neosolva/symfony-bundle-test-pack",
+  "type": "symfony-pack",
+  "homepage": "https://github.com/Ang3/symfony-bundle-test-pack",
+  "description": "Pack for testing reusable bundles for Symfony apps.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Joanis ROUANET",
+      "homepage": "https://github.com/Ang3"
+    }
+  ],
+  "autoload": {
+    "psr-4": {"Ang3\\Bundle\\Test\\": "src/"}
+  },
+  "require": {
+    "php": ">=7.2.5",
+    "symfony/filesystem": "^5.1",
+    "symfony/framework-bundle": "^5.1",
+    "symfony/phpunit-bridge": "^5.1",
+    "symfony/yaml": "^5.1"
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
