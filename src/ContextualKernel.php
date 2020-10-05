@@ -2,7 +2,6 @@
 
 namespace Ang3\Bundle\Test;
 
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel;
@@ -25,9 +24,7 @@ class ContextualKernel extends Kernel
 
     public function registerBundles(): array
     {
-        return array_merge($this->context->getBundles(), [
-            new FrameworkBundle(),
-        ]);
+        return $this->context->getBundles();
     }
 
     public function configureRoutes(RoutingConfigurator $routeConfigurator): void

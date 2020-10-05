@@ -2,6 +2,7 @@
 
 namespace Ang3\Bundle\Test;
 
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -41,6 +42,7 @@ trait MicroKernelTestTrait
     protected static function createKernel(array $options = []): Kernel
     {
         $context = KernelContext::create();
+        $context->addBundle(new FrameworkBundle());
         static::configureKernel($context);
 
         return new ContextualKernel($context);
