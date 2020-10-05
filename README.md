@@ -77,7 +77,7 @@ Configure the kernel
 ### Disable auto-boot
 
 By default, the kernel is automatically booted. 
-However, you can disable this feature by overriding static parameter ```$autoBoot```:
+However, you can disable this feature by overriding the static parameter ```$autoBoot```:
 
 ```php
 // ...
@@ -110,7 +110,7 @@ $context
 ```
 
 **Good to know:** 
-The bundle ```Symfony\Bundle\FrameworkBundle\FrameworkBundle``` is automatically registered, no need to add it here.
+The bundle ```Symfony\Bundle\FrameworkBundle\FrameworkBundle``` is automatically registered, **no need to add it**.
 
 ### Configure bundles
 
