@@ -25,6 +25,11 @@ class ContextualKernel extends Kernel
      */
     private $context;
 
+    /**
+     * @var string[]
+     */
+    private $tmpFiles = [];
+
     public function __construct(KernelContext $context = null)
     {
         $this->context = $context ?: new KernelContext();
@@ -77,8 +82,8 @@ class ContextualKernel extends Kernel
                 throw new \RuntimeException(sprintf('Failed to load resource "%s"', $filename));
             }
 
-            $tmpFile = $this->temporaryFile(basename($filename), $contents);
-            $loader->load($tmpFile);
+            $filename = $this->temporaryFile($contents);
+            $loader->load($filename);
         }
     }
 
@@ -86,24 +91,21 @@ class ContextualKernel extends Kernel
     {
         $cacheDir = $this->getCacheDir();
         parent::shutdown();
-        $this->filesystem->remove($cacheDir);
+        $this->filesystem->remove(array_merge([$cacheDir], $this->tmpFiles));
     }
 
     /**
      * @internal
      */
-    private function temporaryFile(string $name, string $content): string
+    private function temporaryFile(string $contents): string
     {
-        $filename = DIRECTORY_SEPARATOR.
-            trim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).
-            DIRECTORY_SEPARATOR.
-            ltrim($name, DIRECTORY_SEPARATOR);
+        $tmpfile = tmpfile();
+        if (false === $tmpfile) {
+            throw new \RuntimeException('Failed to create a new temporary file.');
+        }
 
-        file_put_contents($filename, $content);
-
-        register_shutdown_function(static function () use ($filename) {
-            unlink($filename);
-        });
+        $filename = stream_get_meta_data($tmpfile)['uri'];
+        file_put_contents($filename, $contents);
 
         return $filename;
     }
