@@ -171,8 +171,6 @@ This method returns the value of asserted parameter.
 
 #### Services
 
-You can assert only **public** services like below:
-
 ```php
 $service = $this->assertService('app.my_provider', 'Foo\Bar\Provider');
 ```
@@ -184,3 +182,30 @@ $service = $this->assertAutowiredService('Foo\Bar\Provider', 'customerProvider')
 ```
 
 Both methods above return the asserted service instance.
+
+#### Private services
+
+**In Symfony 4.1**, tests allow fetching private services by default. 
+However, all **unused private services** will be removed from the container and you will get an error like below:
+
+> The "App\SomeService" service or alias has been removed or inlined when the container
+> was compiled. You should either make it public, or stop using the container directly
+> and use dependency injection instead.
+
+In others words, all unused services of your bundle must be public to be tested... 
+Should we really avoid Symfony best practices? Of course not! This pack provides a trick to add your services manually. 
+Thanks to that, your service is registered with flags ```autowire```, ```autoconfigure``` and... ```public```.
+
+To do that, come back in the configuration of your kernel, and define all unused privates services you want to test:
+
+```php
+protected static function configureKernel(KernelContext $context): void
+{
+    $context
+        // ...
+        ->setService('app.my_service', 'App\SomeService') // Service with ID
+        ->setService('App\SomeService'); // Service with class as ID
+}
+```
+
+That's it!
