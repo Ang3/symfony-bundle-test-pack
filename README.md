@@ -181,4 +181,4 @@ You can also assert service with autowired argument:
 $service = $this->assertAutowiredService('Foo\Bar\Provider', 'customerProvider');
 ```
 
-These both methods return the asserted service instance.
+Both methods above return the asserted service instance.
