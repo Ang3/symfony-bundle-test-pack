@@ -20,6 +20,14 @@
     "symfony/phpunit-bridge": "^5.1",
     "symfony/yaml": "^5.1"
   },
+  "scripts": {
+    "post-install-cmd": [
+      "cp resources/phpunit.xml.dist %PUBLIC_DIR%/phpunit.xml.dist"
+    ],
+    "post-update-cmd": [
+      "cp resources/phpunit.xml.dist %PUBLIC_DIR%/phpunit.xml.dist"
+    ]
+  },
   "config": {
     "sort-packages": true
   }
