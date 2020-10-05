@@ -1,6 +1,11 @@
 Symfony bundle test pack
 ========================
 
+[![Build Status](https://travis-ci.org/Ang3/symfony-bundle-test-pack.svg?branch=master)](https://travis-ci.org/Ang3/symfony-bundle-test-pack) 
+[![Latest Stable Version](https://poser.pugx.org/ang3/symfony-bundle-test-pack/v/stable)](https://packagist.org/packages/ang3/symfony-bundle-test-pack) 
+[![Latest Unstable Version](https://poser.pugx.org/ang3/symfony-bundle-test-pack/v/unstable)](https://packagist.org/packages/ang3/symfony-bundle-test-pack) 
+[![Total Downloads](https://poser.pugx.org/ang3/symfony-bundle-test-pack/downloads)](https://packagist.org/packages/ang3/symfony-bundle-test-pack)
+
 This pack provides tools to write functional test for reusable bundles.
 
 No need to create a test application, or 
