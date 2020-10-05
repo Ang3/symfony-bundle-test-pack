@@ -39,6 +39,11 @@ class KernelContext
     /**
      * @var string[]
      */
+    private $resources = [];
+
+    /**
+     * @var string[]
+     */
     private $routes = [];
 
     public function __construct(string $environment = 'test', bool $debug = true)
@@ -217,6 +222,31 @@ class KernelContext
     public function setService(string $name, string $class = null): self
     {
         $this->services[$name] = $class;
+
+        return $this;
+    }
+
+    public function getResources(): array
+    {
+        return $this->resources;
+    }
+
+    public function setResources(array $resources): self
+    {
+        $this->resources = [];
+
+        foreach ($resources as $filename) {
+            $this->addResource($filename);
+        }
+
+        return $this;
+    }
+
+    public function addResource(string $filename): self
+    {
+        if (!in_array($filename, $this->resources)) {
+            $this->resources[] = $filename;
+        }
 
         return $this;
     }
