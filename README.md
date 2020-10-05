@@ -6,13 +6,13 @@ Symfony bundle test pack
 [![Latest Unstable Version](https://poser.pugx.org/ang3/symfony-bundle-test-pack/v/unstable)](https://packagist.org/packages/ang3/symfony-bundle-test-pack) 
 [![Total Downloads](https://poser.pugx.org/ang3/symfony-bundle-test-pack/downloads)](https://packagist.org/packages/ang3/symfony-bundle-test-pack)
 
-This pack provides tools to write functional test for reusable bundles.
+This pack provides tools to write functional tests for reusable bundles.
 
 No need to create a test application, or 
-tons of micro kernel files: this pack provides a web test class with a contextual kernel 
+tons of micro kernel files: this pack provides a test case classes with a contextual kernel 
 that you can configure easily before using it.
 
-**The idea:** create classes extending ```Symfony\Bundle\FrameworkBundle\Test\KernelTestCase``` 
+**The idea:** create base classes extending ```Symfony\Bundle\FrameworkBundle\Test\KernelTestCase``` 
 and override the method ```KernelTestCase::createKernel()``` to create a kernel from a context instead of basic options.
 
 Summary
