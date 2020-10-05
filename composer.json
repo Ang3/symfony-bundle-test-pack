@@ -15,7 +15,6 @@
   },
   "require": {
     "php": ">=7.2.5",
-    "composer/composer": "^1.0",
     "symfony/filesystem": "^5.1",
     "symfony/framework-bundle": "^5.1",
     "symfony/phpunit-bridge": "^5.1",
@@ -23,18 +22,5 @@
   },
   "config": {
     "sort-packages": true
-  },
-  "scripts": {
-    "post-install-cmd": [
-      "Ang3\\Bundle\\Test\\Composer\\ScriptHandler::copy"
-    ],
-    "post-update-cmd": [
-      "Ang3\\Bundle\\Test\\Composer\\ScriptHandler::copy"
-    ]
-  },
-  "extra": {
-    "copy-file": {
-      "resources/phpunit.xml.dist": "phpunit.xml.dist"
-    }
   }
 }
