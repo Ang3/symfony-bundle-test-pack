@@ -3,6 +3,8 @@
 namespace Ang3\Bundle\Test;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
@@ -42,31 +44,26 @@ class ContextualKernel extends Kernel
 
     public function configureRoutes(RoutingConfigurator $routeConfigurator): void
     {
-        foreach ($this->context->getRoutes() as $filename) {
-            $routeConfigurator->import($filename);
+        $callback = $this->context->getRouting();
+
+        if($callback) {
+            $callback($routeConfigurator);
         }
     }
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
-        foreach ($this->context->getExtensions() as $extensionName => $config) {
-            $container->extension($extensionName, (array) $config);
-        }
+        $callback = $this->context->getContainer();
 
-        $containerParameters = $container->parameters();
-        $containerParameters->set('kernel.default_locale', 'en_US');
-        foreach ($this->context->getParameters() as $name => $value) {
-            $containerParameters->set($name, $value);
+        if($callback) {
+            $callback($container);
         }
+    }
 
-        $containerServices = $container->services();
-        $containerServices->defaults()->public();
-        foreach ($this->context->getServices() as $id => $class) {
-            $containerServices->set($id, $class)
-                ->autowire(true)
-                ->autoconfigure(true)
-                ->public();
-        }
+    protected function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+        $container->addCompilerPass(new TestContainerPass(), PassConfig::TYPE_OPTIMIZE);
     }
 
     public function shutdown(): void

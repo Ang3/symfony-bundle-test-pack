@@ -22,24 +22,14 @@ class KernelContext
     private $bundles = [];
 
     /**
-     * @var array
+     * @var Callable|null
      */
-    private $extensions = [];
+    private $container;
 
     /**
-     * @var array<string, mixed>
+     * @var Callable|null
      */
-    private $parameters = [];
-
-    /**
-     * @var string[]
-     */
-    private $services = [];
-
-    /**
-     * @var string[]
-     */
-    private $routes = [];
+    private $routing;
 
     public function __construct(string $environment = 'test', bool $debug = true)
     {
@@ -71,10 +61,6 @@ class KernelContext
 
         $context = new self($config['environment'], $config['debug']);
         $context->setBundles($config['bundles'] ?? []);
-        $context->setExtensions($config['extensions'] ?? []);
-        $context->setParameters($config['parameters'] ?? []);
-        $context->setServices($config['services'] ?? []);
-        $context->setRoutes($config['routes'] ?? []);
 
         return $context;
     }
@@ -119,28 +105,16 @@ class KernelContext
         return $this;
     }
 
-    public function addBundle(BundleInterface $bundle, array $config = []): self
+    public function addBundle(BundleInterface $bundle): self
     {
         $this->bundles[$bundle->getName()] = $bundle;
-
-        if ($extension = $bundle->getContainerExtension()) {
-            $this->setExtension($extension->getAlias(), $config);
-        }
 
         return $this;
     }
 
     public function removeBundle(string $name): self
     {
-        $bundle = $this->bundles[$name] ?? null;
-
-        if ($bundle) {
-            $extension = $bundle->getContainerExtension();
-
-            if ($extension && isset($this->extensions[$extension->getAlias()])) {
-                unset($this->extensions[$extension->getAlias()]);
-            }
-
+        if (array_key_exists($name, $this->bundles)) {
             unset($this->bundles[$name]);
         }
 
@@ -152,96 +126,26 @@ class KernelContext
         return isset($this->bundles[$name]);
     }
 
-    public function getExtensions(): array
+    public function getContainer(): ?callable
     {
-        return $this->extensions;
+        return $this->container;
     }
 
-    public function setExtensions(array $extensions): self
+    public function setContainer(?callable $container): self
     {
-        $this->extensions = [];
-
-        foreach ($extensions as $name => $config) {
-            $this->setExtension($name, $config);
-        }
+        $this->container = $container;
 
         return $this;
     }
 
-    public function setExtension(string $extensionName, array $config = []): self
+    public function getRouting(): ?callable
     {
-        $this->extensions[$extensionName] = $config;
-
-        return $this;
+        return $this->routing;
     }
 
-    public function getParameters(): array
+    public function setRouting(?callable $routing): self
     {
-        return $this->parameters;
-    }
-
-    public function setParameters(array $parameters): self
-    {
-        $this->parameters = [];
-
-        foreach ($parameters as $name => $value) {
-            $this->setParameter($name, $value);
-        }
-
-        return $this;
-    }
-
-    public function setParameter(string $name, string $value): self
-    {
-        $this->parameters[$name] = $value;
-
-        return $this;
-    }
-
-    public function getServices(): array
-    {
-        return $this->services;
-    }
-
-    public function setServices(array $services): self
-    {
-        $this->services = [];
-
-        foreach ($services as $name => $class) {
-            $this->setService($name, $class);
-        }
-
-        return $this;
-    }
-
-    public function setService(string $name, string $class = null): self
-    {
-        $this->services[$name] = $class;
-
-        return $this;
-    }
-
-    public function getRoutes(): array
-    {
-        return $this->routes;
-    }
-
-    public function setRoutes(array $routes): self
-    {
-        $this->routes = [];
-
-        foreach ($routes as $filename) {
-            $this->addRoute($filename);
-        }
-
-        return $this;
-    }
-
-    public function addRoute(string $filename): self
-    {
-        if (!in_array($filename, $this->routes)) {
-            $this->routes[] = $filename;
-        }
+        $this->routing = $routing;
 
         return $this;
     }
