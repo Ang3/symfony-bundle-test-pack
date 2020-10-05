@@ -31,7 +31,7 @@ trait MicroKernelTestTrait
 
     protected function tearDown(): void
     {
-        if (!parent::$booted) {
+        if (!static::$kernel) {
             return;
         }
 
