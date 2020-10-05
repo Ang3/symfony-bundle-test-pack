@@ -142,6 +142,9 @@ $context
     ->setService('Foo\Bar\MyProvider');
 ```
 
+You must define all **unused private services** here. 
+Please see the section "[Private services](#private-services)" to know why it's required.
+
 ### Routes
 
 To test your controllers, you probably want to import your routes files. 
@@ -196,18 +199,6 @@ In others words, all unused services of your bundle must be public to be tested.
 Should we really avoid Symfony best practices? Of course not! This pack provides a trick to add your services manually. 
 Thanks to that, your service is registered with flags ```autowire```, ```autoconfigure``` and... ```public```.
 
-To do that, come back in the configuration of your kernel, and define all unused privates services you want to test:
-
-```php
-// ...
-
-protected static function configureKernel(KernelContext $context): void
-{
-    $context
-        // ...
-        ->setService('app.my_service', 'App\SomeService') // Service with ID
-        ->setService('App\SomeService'); // Service with class as ID
-}
-```
+To do that, come back in the configuration of your kernel and define all unused privates services you want to test.
 
 That's it!
