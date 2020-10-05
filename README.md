@@ -77,7 +77,7 @@ Configure the kernel
 ### Disable auto-boot
 
 By default, the kernel is automatically booted. 
-However, you can disable by overriding static parameter ```$autoBoot```:
+However, you can disable this feature by overriding static parameter ```$autoBoot```:
 
 ```php
 // ...
