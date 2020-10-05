@@ -40,9 +40,8 @@ trait ContainerAssertionsTrait
         $this->assertTrue(static::$container->has($id), sprintf('The container should contain a service with ID "%s"', $id));
         $service = static::$container->get($id);
 
-        if ($class) {
-            $this->assertInstanceOf($class, $service, sprintf('The service with ID "%s" should be an instance of "%s"', $id, $class));
-        }
+        $class = $class ?: $id;
+        $this->assertInstanceOf($class, $service, sprintf('The service with ID "%s" should be an instance of "%s"', $id, $class));
 
         return $service;
     }
