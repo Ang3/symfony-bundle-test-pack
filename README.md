@@ -23,7 +23,7 @@ Summary
     - [Write your test](#write-your-test)
     - [Configure the kernel](#configure-the-kernel)
     - [Assertions](#assertions)
-        - [Parameters and services](#parameters-and-services)
+        - [Container](#container)
 
 Installation
 ============
@@ -157,9 +157,11 @@ $context
 Assertions
 ----------
 
+### Container
+
 The bundle test class provides some useful methods to assert container parameters and services.
 
-### Parameters
+#### Parameters
 
 ```php
 $parameterValue = $this->assertParameter('app.my_param', 'foo');
@@ -167,7 +169,7 @@ $parameterValue = $this->assertParameter('app.my_param', 'foo');
 
 This method returns the value of asserted parameter.
 
-### Services
+#### Services
 
 You can assert only **public** services like below:
 
