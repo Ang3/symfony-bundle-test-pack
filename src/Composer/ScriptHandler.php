@@ -15,6 +15,7 @@ class ScriptHandler
         $extras = $composer->getPackage()->getExtra();
         $files = $extras['copy-file'];
         $io = $event->getIO();
+        $io->write('test');
 
         if (!$files) {
             $io->write("No dirs or files are configured through the composer extra section.");
