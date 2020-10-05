@@ -22,6 +22,14 @@ Summary
 - [Usage](#usage)
     - [Write your test](#write-your-test)
     - [Configure the kernel](#configure-the-kernel)
+        - [Disable auto-boot](#disable-auto-boot)
+        - [Bundles](#bundles)
+            - [Register bundles](#register-bundles)
+            - [Bundle extensions](#bundle-extensions)
+        - [Container](#container)
+            - [Parameters](#parameters)
+            - [Services](#services)
+        - [Routes](#routes)
     - [Assertions](#assertions)
         - [Container](#container)
 
@@ -90,7 +98,9 @@ class ServicesTest extends BundleTestCase
 }
 ```
 
-### Register bundles
+### Bundles
+
+#### Register bundles
 
 The first thing you probably want to do is to configure the kernel to boot with your reusable bundle. 
 To do that, you just have to add a new instance of your bundle like below:
@@ -112,7 +122,7 @@ $context
 **Good to know:** 
 The bundle ```Symfony\Bundle\FrameworkBundle\FrameworkBundle``` is automatically registered, **no need to add it**.
 
-### Configure bundles
+#### Bundle extensions
 
 Then, you probably want to configure bundle extensions to test the bundle configuration for example. 
 The context allows you to add extension configuration:
@@ -124,9 +134,11 @@ $context
     ->setExtension('my_bundle', []);
 ```
 
-### Parameters and services
+### Container
 
-You can use the context to add default parameters and services:
+#### Parameters
+
+You can use the context to add default parameters:
 
 ```php
 /** @var \Ang3\Bundle\Test\KernelContext $context */
@@ -135,6 +147,8 @@ $context
     ->setParameter('app.my_param_2', 'bar');
 ```
 
+#### Services
+
 ```php
 /** @var \Ang3\Bundle\Test\KernelContext $context */
 $context
@@ -142,8 +156,19 @@ $context
     ->setService('Foo\Bar\MyProvider');
 ```
 
-You must define all **unused private services** here. 
-Please see the section "[Private services](#private-services)" to know why it's required.
+**In Symfony 4.1**, tests allow fetching private services by default. 
+However, all **unused private services** will be removed from the container and you will get an error like below 
+if you try to assert it:
+
+> The "App\SomeService" service or alias has been removed or inlined when the container
+> was compiled. You should either make it public, or stop using the container directly
+> and use dependency injection instead.
+
+In others words, all unused services of your bundle must be public to be tested... 
+Should we really avoid Symfony best practices? Of course not! This pack provides a trick to add your services manually. 
+Thanks to that, your service is registered with flags ```autowire```, ```autoconfigure``` and... ```public```.
+
+To do that, please define here all unused privates services you want to test.
 
 ### Routes
 
@@ -160,11 +185,9 @@ $context
 Assertions
 ----------
 
-### Container
-
 The bundle test class provides some useful methods to assert container parameters and services.
 
-#### Parameters
+**Parameters**
 
 ```php
 $parameterValue = $this->assertParameter('app.my_param', 'foo');
@@ -172,7 +195,7 @@ $parameterValue = $this->assertParameter('app.my_param', 'foo');
 
 This method returns the value of asserted parameter.
 
-#### Services
+**Services**
 
 ```php
 $service = $this->assertService('app.my_provider', 'Foo\Bar\Provider');
@@ -185,20 +208,5 @@ $service = $this->assertAutowiredService('Foo\Bar\Provider', 'customerProvider')
 ```
 
 Both methods above return the asserted service instance.
-
-#### Private services
-
-**In Symfony 4.1**, tests allow fetching private services by default. 
-However, all **unused private services** will be removed from the container and you will get an error like below:
-
-> The "App\SomeService" service or alias has been removed or inlined when the container
-> was compiled. You should either make it public, or stop using the container directly
-> and use dependency injection instead.
-
-In others words, all unused services of your bundle must be public to be tested... 
-Should we really avoid Symfony best practices? Of course not! This pack provides a trick to add your services manually. 
-Thanks to that, your service is registered with flags ```autowire```, ```autoconfigure``` and... ```public```.
-
-To do that, come back in the configuration of your kernel and define all unused privates services you want to test.
 
 That's it!
