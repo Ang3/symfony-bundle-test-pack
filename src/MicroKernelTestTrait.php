@@ -3,16 +3,10 @@
 namespace Ang3\Bundle\Test;
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
 
 trait MicroKernelTestTrait
 {
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
-
     /**
      * Kernel auto-boot.
      *
@@ -22,21 +16,9 @@ trait MicroKernelTestTrait
 
     protected function initializeBundleTest(): void
     {
-        $this->filesystem = new Filesystem();
-
         if (static::$autoBoot) {
             static::bootKernel();
         }
-    }
-
-    protected function tearDown(): void
-    {
-        if (!static::$kernel) {
-            return;
-        }
-
-        $this->filesystem->remove(static::$kernel->getCacheDir());
-        parent::tearDown();
     }
 
     protected static function createKernel(array $options = []): Kernel
