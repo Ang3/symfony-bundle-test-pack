@@ -199,6 +199,8 @@ Thanks to that, your service is registered with flags ```autowire```, ```autocon
 To do that, come back in the configuration of your kernel, and define all unused privates services you want to test:
 
 ```php
+// ...
+
 protected static function configureKernel(KernelContext $context): void
 {
     $context
