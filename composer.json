@@ -1,5 +1,5 @@
 {
-  "name": "neosolva/symfony-bundle-test-pack",
+  "name": "ang3/symfony-bundle-test-pack",
   "type": "symfony-pack",
   "homepage": "https://github.com/Ang3/symfony-bundle-test-pack",
   "description": "Pack to test reusable bundles for Symfony apps.",
