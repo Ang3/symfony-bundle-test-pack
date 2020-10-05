@@ -119,9 +119,13 @@ class KernelContext
         return $this;
     }
 
-    public function addBundle(BundleInterface $bundle): self
+    public function addBundle(BundleInterface $bundle, array $config = []): self
     {
         $this->bundles[] = $bundle;
+
+        if($extension = $bundle->getContainerExtension()) {
+            $this->setExtension($extension->getAlias(), $config);
+        }
 
         return $this;
     }
