@@ -47,8 +47,9 @@ class ContextualKernel extends Kernel
         }
 
         $containerServices = $container->services();
+        $containerServices->defaults()->public();
         foreach ($this->context->getServices() as $id => $class) {
-            $containerServices->set($id, $class);
+            $containerServices->set($id, $class)->public();
         }
     }
 }
