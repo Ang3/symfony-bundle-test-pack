@@ -121,13 +121,35 @@ class KernelContext
 
     public function addBundle(BundleInterface $bundle, array $config = []): self
     {
-        $this->bundles[] = $bundle;
+        $this->bundles[get_class($bundle)] = $bundle;
 
         if($extension = $bundle->getContainerExtension()) {
             $this->setExtension($extension->getAlias(), $config);
         }
 
         return $this;
+    }
+
+    public function removeBundle(string $class): self
+    {
+        $bundle = $this->bundles[$class] ?? null;
+
+        if($bundle) {
+            $extension = $bundle->getContainerExtension();
+
+            if($extension && isset($this->extensions[$extension->getAlias()])) {
+                unset($this->extensions[$extension->getAlias()]);
+            }
+
+            unset($this->bundles[$class]);
+        }
+
+        return $this;
+    }
+
+    public function hasBundle(string $class): bool
+    {
+        return isset($this->bundles[$class]);
     }
 
     public function getExtensions(): array
