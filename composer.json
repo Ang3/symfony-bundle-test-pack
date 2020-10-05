@@ -20,7 +20,23 @@
     "symfony/phpunit-bridge": "^5.1",
     "symfony/yaml": "^5.1"
   },
+  "require-dev": {
+    "composer/composer": "^1.0"
+  },
   "config": {
     "sort-packages": true
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "Ang3\\Bundle\\Test\\Composer\\ScriptHandler::copy"
+    ],
+    "post-update-cmd": [
+      "Ang3\\Bundle\\Test\\Composer\\ScriptHandler::copy"
+    ]
+  },
+  "extra": {
+    "copy-file": {
+      "resources/phpunit.xml.dist": "phpunit.xml.dist"
+    }
   }
 }
