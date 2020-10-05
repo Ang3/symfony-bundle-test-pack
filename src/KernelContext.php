@@ -123,7 +123,7 @@ class KernelContext
     {
         $this->bundles[get_class($bundle)] = $bundle;
 
-        if($extension = $bundle->getContainerExtension()) {
+        if ($extension = $bundle->getContainerExtension()) {
             $this->setExtension($extension->getAlias(), $config);
         }
 
@@ -134,10 +134,10 @@ class KernelContext
     {
         $bundle = $this->bundles[$class] ?? null;
 
-        if($bundle) {
+        if ($bundle) {
             $extension = $bundle->getContainerExtension();
 
-            if($extension && isset($this->extensions[$extension->getAlias()])) {
+            if ($extension && isset($this->extensions[$extension->getAlias()])) {
                 unset($this->extensions[$extension->getAlias()]);
             }
 
