@@ -68,7 +68,7 @@ class ServicesTest extends BundleTestCase
 On each test, the kernel is destroyed, and a new one is created from a new context class. 
 This context is sent to the method ```configureKernel()``` to allow you to configure the kernel.
 
-If you want to do a web test case, you just have to change the class ```Ang3\Bundle\Test\BundleTestCase``` 
+If you want to write a **web** test case, you just have to change the class ```Ang3\Bundle\Test\BundleTestCase``` 
 by the class ```Ang3\Bundle\Test\WebTestCase```.
 
 Configure the kernel
