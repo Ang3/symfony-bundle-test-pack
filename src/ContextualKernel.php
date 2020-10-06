@@ -37,6 +37,11 @@ class ContextualKernel extends Kernel
         parent::__construct($context->getEnvironment(), $context->isDebug());
     }
 
+    public static function createContext(): KernelContext
+    {
+        return new KernelContext();
+    }
+
     public function registerBundles(): array
     {
         return $this->context->getBundles();
