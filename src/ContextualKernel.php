@@ -59,7 +59,9 @@ class ContextualKernel extends Kernel
     protected function build(ContainerBuilder $container): void
     {
         parent::build($container);
-        $container->addCompilerPass(new TestContainerPass($this->context->getPrivateServices()), PassConfig::TYPE_OPTIMIZE);
+
+        $testContainerPass = new TestContainerPass($this->context->getPrivateServices(), $this->context->getPrivateAliases());
+        $container->addCompilerPass($testContainerPass, PassConfig::TYPE_OPTIMIZE);
 
         if ($callback = $this->context->getBuilder()) {
             $callback($container);

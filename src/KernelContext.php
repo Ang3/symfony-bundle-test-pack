@@ -37,6 +37,11 @@ class KernelContext
     private $privateServices = [];
 
     /**
+     * @var string[]
+     */
+    private $privateAliases = [];
+
+    /**
      * @var callable|null
      */
     private $builder;
@@ -180,6 +185,31 @@ class KernelContext
     {
         if (!in_array($id, $this->privateServices)) {
             $this->privateServices[] = $id;
+        }
+
+        return $this;
+    }
+
+    public function getPrivateAliases(): array
+    {
+        return $this->privateAliases;
+    }
+
+    public function setPrivateAliases(array $privateAliases = []): self
+    {
+        $this->privateAliases = [];
+
+        foreach ($privateAliases as $alias) {
+            $this->setPrivateAlias($alias);
+        }
+
+        return $this;
+    }
+
+    public function setPrivateAlias(string $id): self
+    {
+        if (!in_array($id, $this->privateAliases)) {
+            $this->privateAliases[] = $id;
         }
 
         return $this;

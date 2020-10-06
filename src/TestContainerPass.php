@@ -19,9 +19,15 @@ class TestContainerPass implements CompilerPassInterface
      */
     private $services;
 
-    public function __construct(array $services = [])
+    /**
+     * @var string[]
+     */
+    private $aliases;
+
+    public function __construct(array $services = [], array $aliases = [])
     {
         $this->services = $services;
+        $this->aliases = $aliases;
     }
 
     public function process(ContainerBuilder $container): void
@@ -29,6 +35,12 @@ class TestContainerPass implements CompilerPassInterface
         foreach ($this->services as $id) {
             $container
                 ->getDefinition($id)
+                ->setPublic(true);
+        }
+
+        foreach ($this->aliases as $id) {
+            $container
+                ->getAlias($id)
                 ->setPublic(true);
         }
     }
