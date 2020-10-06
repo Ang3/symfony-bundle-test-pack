@@ -18,8 +18,8 @@ final class DefaultPackageConfigs
         ],
         'cache' => [],
         'router' => [
-            'utf8' => true
-        ]
+            'utf8' => true,
+        ],
     ];
 
     public const SECURITY = [
@@ -77,6 +77,6 @@ final class DefaultPackageConfigs
     ];
 
     public const SWIFTMAILER = [
-        'disable_delivery' => true
+        'disable_delivery' => true,
     ];
 }

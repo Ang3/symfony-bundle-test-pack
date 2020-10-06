@@ -66,23 +66,23 @@ class ContextualKernel extends Kernel
             $callback($container);
         }
 
-        if($this->context->hasBundle('FrameworkBundle') && !$extensions->has('framework')) {
+        if ($this->context->hasBundle('FrameworkBundle') && !$extensions->has('framework')) {
             $extensions->addFrameworkExtension();
         }
 
-        if($this->context->hasBundle('SecurityBundle') && !$extensions->has('security')) {
+        if ($this->context->hasBundle('SecurityBundle') && !$extensions->has('security')) {
             $extensions->addSecurityExtension();
         }
 
-        if($this->context->hasBundle('DoctrineBundle') && !$extensions->has('doctrine')) {
+        if ($this->context->hasBundle('DoctrineBundle') && !$extensions->has('doctrine')) {
             $extensions->addDoctrineExtension();
         }
 
-        if($this->context->hasBundle('ApiPlatformBundle') && !$extensions->has('api_platform')) {
+        if ($this->context->hasBundle('ApiPlatformBundle') && !$extensions->has('api_platform')) {
             $extensions->addApiPlatformExtension();
         }
 
-        if($this->context->hasBundle('SwiftmailerBundle') && !$extensions->has('swiftmailer')) {
+        if ($this->context->hasBundle('SwiftmailerBundle') && !$extensions->has('swiftmailer')) {
             $extensions->addSwiftmailerExtension();
         }
     }
