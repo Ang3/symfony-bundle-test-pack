@@ -69,7 +69,7 @@ final class DefaultPackageConfigs
             ],
         ],
         'patch_formats' => [
-            'application/merge-patch+json',
+            'json' => 'application/merge-patch+json',
         ],
         'swagger' => [
             'versions' => [3],
