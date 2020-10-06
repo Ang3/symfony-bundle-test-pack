@@ -17,6 +17,9 @@ final class DefaultPackageConfigs
             'log' => true,
         ],
         'cache' => [],
+        'router' => [
+            'utf8' => true
+        ]
     ];
 
     public const SECURITY = [
