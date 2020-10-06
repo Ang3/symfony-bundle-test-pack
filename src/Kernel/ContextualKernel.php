@@ -54,36 +54,39 @@ class ContextualKernel extends Kernel
         }
     }
 
-    protected function configureContainer(ContainerConfigurator $container): void
+    protected function configureContainer(ContainerConfigurator $containerConfigurator): void
     {
         $extensions = $this->context->getExtensions();
-
-        foreach ($this->context->getExtensions() as $name => $config) {
-            $container->extension($name, $config);
-        }
+        $this->loadExtensions($containerConfigurator, $extensions);
 
         if ($callback = $this->context->getContainer()) {
-            $callback($container);
+            $callback($containerConfigurator);
         }
 
-        if ($this->context->hasBundle('FrameworkBundle') && !$extensions->has('framework')) {
-            $extensions->addFrameworkExtension();
-        }
+        if ($this->context->autoProvideMissingExtensions()) {
+            $missingExtensions = new ExtensionRegistry();
 
-        if ($this->context->hasBundle('SecurityBundle') && !$extensions->has('security')) {
-            $extensions->addSecurityExtension();
-        }
+            if ($this->context->hasBundle('FrameworkBundle') && !$extensions->has('framework')) {
+                $missingExtensions->addFrameworkExtension();
+            }
 
-        if ($this->context->hasBundle('DoctrineBundle') && !$extensions->has('doctrine')) {
-            $extensions->addDoctrineExtension();
-        }
+            if ($this->context->hasBundle('SecurityBundle') && !$extensions->has('security')) {
+                $missingExtensions->addSecurityExtension();
+            }
 
-        if ($this->context->hasBundle('ApiPlatformBundle') && !$extensions->has('api_platform')) {
-            $extensions->addApiPlatformExtension();
-        }
+            if ($this->context->hasBundle('DoctrineBundle') && !$extensions->has('doctrine')) {
+                $missingExtensions->addDoctrineExtension();
+            }
 
-        if ($this->context->hasBundle('SwiftmailerBundle') && !$extensions->has('swiftmailer')) {
-            $extensions->addSwiftmailerExtension();
+            if ($this->context->hasBundle('ApiPlatformBundle') && !$extensions->has('api_platform')) {
+                $missingExtensions->addApiPlatformExtension();
+            }
+
+            if ($this->context->hasBundle('SwiftmailerBundle') && !$extensions->has('swiftmailer')) {
+                $missingExtensions->addSwiftmailerExtension();
+            }
+
+            $this->loadExtensions($containerConfigurator, $missingExtensions);
         }
     }
 
@@ -104,5 +107,15 @@ class ContextualKernel extends Kernel
         $cacheDir = $this->getCacheDir();
         parent::shutdown();
         $this->filesystem->remove(array_merge([$cacheDir], $this->tmpFiles));
+    }
+
+    /**
+     * @internal
+     */
+    private function loadExtensions(ContainerConfigurator $containerConfigurator, ExtensionRegistry $extensionRegistry): void
+    {
+        foreach ($extensionRegistry as $name => $config) {
+            $containerConfigurator->extension($name, $config);
+        }
     }
 }

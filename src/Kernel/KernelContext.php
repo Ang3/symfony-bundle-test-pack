@@ -6,6 +6,8 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 class KernelContext
 {
+    public const AUTO_PROVIDE_MISSING_EXTENSIONS = 'auto_provide_missing_extensions';
+
     /**
      * @var string
      */
@@ -51,11 +53,19 @@ class KernelContext
      */
     private $builder;
 
-    public function __construct(string $environment = 'test', bool $debug = true)
+    /**
+     * @var array
+     */
+    private $options = [
+        self::AUTO_PROVIDE_MISSING_EXTENSIONS => true,
+    ];
+
+    public function __construct(string $environment = 'test', bool $debug = true, array $options = [])
     {
         $this->environment = $environment;
         $this->debug = $debug;
         $this->extensions = new ExtensionRegistry();
+        $this->options = array_merge($this->options, $options);
     }
 
     public static function create(array $config = []): self
@@ -126,9 +136,25 @@ class KernelContext
         return $this;
     }
 
-    public function addBundle(BundleInterface $bundle): self
+    public function addBundle(BundleInterface $bundle, array $config = []): self
     {
-        $this->bundles[$bundle->getName()] = $bundle;
+        $bundleName = $bundle->getName();
+
+        if (array_key_exists($bundleName, $this->bundles)) {
+            throw new \LogicException(sprintf('The bundle "%s" was already added.', $bundleName));
+        }
+
+        $this->bundles[$bundleName] = $bundle;
+
+        if ($config) {
+            $extension = $bundle->getContainerExtension();
+
+            if (!$extension) {
+                throw new \LogicException(sprintf('The bundle "%s" has no extension to configure.', $bundleName));
+            }
+
+            $this->extensions->add($extension->getAlias(), $config);
+        }
 
         return $this;
     }
@@ -243,6 +269,11 @@ class KernelContext
         $this->builder = $builder;
 
         return $this;
+    }
+
+    public function autoProvideMissingExtensions(): bool
+    {
+        return true === $this->options[self::AUTO_PROVIDE_MISSING_EXTENSIONS];
     }
 
     public function createKernel(): ContextualKernel

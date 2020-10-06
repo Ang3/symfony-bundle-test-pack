@@ -9,11 +9,11 @@ class ExtensionRegistry implements \IteratorAggregate
     /**
      * @var array
      */
-    private $extensions = [];
+    private $config = [];
 
     public function getIterator(): Generator
     {
-        foreach ($this->extensions as $name => $config) {
+        foreach ($this->config as $name => $config) {
             yield $name => $config;
         }
     }
@@ -25,7 +25,7 @@ class ExtensionRegistry implements \IteratorAggregate
 
     public function addApiPlatformExtension(): self
     {
-        if (!isset($this->extensions['doctrine'])) {
+        if (!isset($this->config['doctrine'])) {
             $this->addDoctrineExtension();
         }
 
@@ -34,7 +34,7 @@ class ExtensionRegistry implements \IteratorAggregate
 
     public function addDoctrineExtension(): self
     {
-        if (!isset($this->extensions['framework'])) {
+        if (!isset($this->config['framework'])) {
             $this->addFrameworkExtension();
         }
 
@@ -43,7 +43,7 @@ class ExtensionRegistry implements \IteratorAggregate
 
     public function addSecurityExtension(): self
     {
-        if (!isset($this->extensions['framework'])) {
+        if (!isset($this->config['framework'])) {
             $this->addFrameworkExtension();
         }
 
@@ -57,27 +57,27 @@ class ExtensionRegistry implements \IteratorAggregate
 
     public function add(string $name, array $config = []): self
     {
-        if (!isset($this->extensions[$name])) {
-            $this->extensions[$name] = [];
+        if (!isset($this->config[$name])) {
+            $this->config[$name] = [];
         }
 
-        $this->extensions[$name] = array_merge_recursive($this->extensions[$name], $config);
+        $this->config[$name] = array_merge_recursive($this->config[$name], $config);
 
         return $this;
     }
 
     public function get(string $name): ?array
     {
-        return $this->extensions[$name] ?? null;
+        return $this->config[$name] ?? null;
     }
 
     public function has(string $name): bool
     {
-        return isset($this->extensions[$name]);
+        return isset($this->config[$name]);
     }
 
-    public function getExtensions(): array
+    public function getConfig(): array
     {
-        return $this->extensions;
+        return $this->config;
     }
 }
