@@ -75,4 +75,8 @@ final class DefaultPackageConfigs
             'versions' => [3],
         ],
     ];
+
+    public const SWIFTMAILER = [
+        'disable_delivery' => true
+    ];
 }

@@ -18,6 +18,11 @@ class ExtensionRegistry implements \IteratorAggregate
         }
     }
 
+    public function addSwiftmailerExtension(): self
+    {
+        return $this->add('swiftmailer', DefaultPackageConfigs::SWIFTMAILER);
+    }
+
     public function addApiPlatformExtension(): self
     {
         if (!isset($this->extensions['doctrine'])) {
