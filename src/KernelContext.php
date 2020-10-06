@@ -22,12 +22,12 @@ class KernelContext
     private $bundles = [];
 
     /**
-     * @var Callable|null
+     * @var callable|null
      */
     private $container;
 
     /**
-     * @var Callable|null
+     * @var callable|null
      */
     private $routing;
 

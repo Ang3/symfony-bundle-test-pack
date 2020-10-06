@@ -46,7 +46,7 @@ class ContextualKernel extends Kernel
     {
         $callback = $this->context->getRouting();
 
-        if($callback) {
+        if ($callback) {
             $callback($routeConfigurator);
         }
     }
@@ -55,12 +55,12 @@ class ContextualKernel extends Kernel
     {
         $callback = $this->context->getContainer();
 
-        if($callback) {
+        if ($callback) {
             $callback($container);
         }
     }
 
-    protected function build(ContainerBuilder $container)
+    protected function build(ContainerBuilder $container): void
     {
         parent::build($container);
         $container->addCompilerPass(new TestContainerPass(), PassConfig::TYPE_OPTIMIZE);
