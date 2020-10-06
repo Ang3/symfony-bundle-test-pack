@@ -60,40 +60,34 @@ class KernelContext
         self::AUTO_PROVIDE_MISSING_EXTENSIONS => true,
     ];
 
-    public function __construct(string $environment = 'test', bool $debug = true, array $options = [])
+    public function __construct(array $options = [])
     {
-        $this->environment = $environment;
-        $this->debug = $debug;
+        if (!isset($options['environment'])) {
+            if (isset($_ENV['APP_ENV'])) {
+                $this->environment = (string) $_ENV['APP_ENV'];
+            } elseif (isset($_SERVER['APP_ENV'])) {
+                $this->environment = (string) $_SERVER['APP_ENV'];
+            } else {
+                $this->environment = 'test';
+            }
+
+            unset($options['debug']);
+        }
+
+        if (!isset($options['debug'])) {
+            if (isset($_ENV['APP_DEBUG'])) {
+                $this->debug = (bool) $_ENV['APP_DEBUG'];
+            } elseif (isset($_SERVER['APP_DEBUG'])) {
+                $this->debug = (bool) $_SERVER['APP_DEBUG'];
+            } else {
+                $this->debug = true;
+            }
+
+            unset($options['debug']);
+        }
+
         $this->extensions = new ExtensionRegistry();
         $this->options = array_merge($this->options, $options);
-    }
-
-    public static function create(array $config = []): self
-    {
-        if (!isset($config['environment'])) {
-            if (isset($_ENV['APP_ENV'])) {
-                $config['environment'] = $_ENV['APP_ENV'];
-            } elseif (isset($_SERVER['APP_ENV'])) {
-                $config['environment'] = $_SERVER['APP_ENV'];
-            } else {
-                $config['environment'] = 'test';
-            }
-        }
-
-        if (!isset($config['debug'])) {
-            if (isset($_ENV['APP_DEBUG'])) {
-                $config['debug'] = $_ENV['APP_DEBUG'];
-            } elseif (isset($_SERVER['APP_DEBUG'])) {
-                $config['debug'] = $_SERVER['APP_DEBUG'];
-            } else {
-                $config['debug'] = true;
-            }
-        }
-
-        $context = new self($config['environment'], $config['debug']);
-        $context->setBundles($config['bundles'] ?? []);
-
-        return $context;
     }
 
     public function getEnvironment(): string
