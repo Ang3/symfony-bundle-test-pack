@@ -21,17 +21,12 @@ Summary
 - [Installation](#installation)
 - [Usage](#usage)
     - [Write your test](#write-your-test)
-    - [Configure the kernel](#configure-the-kernel)
         - [Disable auto-boot](#disable-auto-boot)
-        - [Bundles](#bundles)
-            - [Register bundles](#register-bundles)
-            - [Bundle extensions](#bundle-extensions)
-        - [Container](#container)
-            - [Parameters](#parameters)
-            - [Services](#services)
-        - [Routes](#routes)
-    - [Assertions](#assertions)
-        - [Container](#container)
+    - [Configure the kernel](#configure-the-kernel)
+        - [Register bundles](#register-bundles)
+        - [Private services and aliases](#private-services-and-aliases)
+        - [Build the container](#build-the-container)
+        - [Configure routing](#configure-routing)
 
 Installation
 ============
@@ -56,6 +51,8 @@ Usage
 Write your test
 ---------------
 
+### Test case kernel
+
 Create a new PHP file in your tests directory (i.e ```tests/ServicesTest.php```)  and paste the content below:
 
 ```php
@@ -79,12 +76,9 @@ This context is sent to the method ```configureKernel()``` to allow you to confi
 If you want to write a **web** test case, you just have to change the class ```Ang3\Bundle\Test\BundleTestCase``` 
 by the class ```Ang3\Bundle\Test\WebTestCase```.
 
-Configure the kernel
---------------------
-
 ### Disable auto-boot
 
-By default, the kernel is automatically booted. 
+By default, the kernel is automatically booted on each test.
 However, you can disable this feature by overriding the static parameter ```$autoBoot```:
 
 ```php
@@ -98,9 +92,24 @@ class ServicesTest extends BundleTestCase
 }
 ```
 
-### Bundles
+### Standalone
 
-#### Register bundles
+To create an isolated kernel in a test, create it directly from a context:
+
+```php
+use Ang3\Bundle\Test\ContextualKernel;
+
+$context = ContextualKernel::createContext();
+$kernel = new ContextualKernel($context);
+```
+
+Working with kernel context
+---------------------------
+
+By default, the kernel is just... a micro-kernel. No bundles registered. 
+All the logic resides on the context to configure the kernel as to your needs.
+
+### Register bundles
 
 The first thing you probably want to do is to configure the kernel to boot with your reusable bundle. 
 To do that, you just have to add a new instance of your bundle like below:
@@ -122,91 +131,8 @@ $context
 **Good to know:** 
 The bundle ```Symfony\Bundle\FrameworkBundle\FrameworkBundle``` is automatically registered, **no need to add it**.
 
-#### Bundle extensions
+### Private services and aliases
 
-Then, you probably want to configure bundle extensions to test the bundle configuration for example. 
-The context allows you to add extension configuration:
+### Build the container
 
-```php
-/** @var \Ang3\Bundle\Test\KernelContext $context */
-$context
-    ->setExtension('doctrine', [])
-    ->setExtension('my_bundle', []);
-```
-
-### Container
-
-#### Parameters
-
-You can use the context to add default parameters:
-
-```php
-/** @var \Ang3\Bundle\Test\KernelContext $context */
-$context
-    ->setParameter('app.my_param_1', 'foo')
-    ->setParameter('app.my_param_2', 'bar');
-```
-
-#### Services
-
-```php
-/** @var \Ang3\Bundle\Test\KernelContext $context */
-$context
-    ->setService('app.my_provider', 'Foo\Bar\MyProvider')
-    ->setService('Foo\Bar\MyProvider');
-```
-
-**In Symfony 4.1**, tests allow fetching private services by default. 
-However, all **unused private services** will be removed from the container and you will get an error like below 
-if you try to assert it:
-
-> The "App\SomeService" service or alias has been removed or inlined when the container
-> was compiled. You should either make it public, or stop using the container directly
-> and use dependency injection instead.
-
-In others words, all unused services of your bundle must be public to be tested... 
-Should we really avoid Symfony best practices? Of course not! This pack provides a trick to add your services manually. 
-Thanks to that, your service is registered with flags ```autowire```, ```autoconfigure``` and... ```public```.
-
-To do that, please define here all unused privates services you want to test.
-
-### Routes
-
-To test your controllers, you probably want to import your routes files. 
-To do that, add files realpath to the context:
-
-```php
-/** @var \Ang3\Bundle\Test\KernelContext $context */
-$context
-    ->addRoute(__DIR__.'../config/routes/routes1.yaml')
-    ->addRoute(__DIR__.'../config/routes/routes2.xml');
-```
-
-Assertions
-----------
-
-The bundle test class provides some useful methods to assert container parameters and services.
-
-**Parameters**
-
-```php
-$parameterValue = $this->assertParameter('app.my_param', 'foo');
-```
-
-This method returns the value of asserted parameter.
-
-**Services**
-
-```php
-$service = $this->assertService('app.my_provider', 'Foo\Bar\Provider');
-```
-
-You can also assert service with autowired argument:
-
-```php
-$service = $this->assertAutowiredService('Foo\Bar\Provider', 'customerProvider');
-```
-
-Both methods above return the asserted service instance.
-
-That's it!
+### Configure routing
