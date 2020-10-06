@@ -128,16 +128,18 @@ You can chain all methods to add more bundles:
 ```php
 /** @var \Ang3\Bundle\Test\Kernel\KernelContext $context */
 $context
+    ->addBundle(new FrameworkBundle())
     ->addBundle(new DoctrineBunble())
     ->addBundle(new MyBundle());
 ```
 
-**Good to know:** 
-The bundle ```Symfony\Bundle\FrameworkBundle\FrameworkBundle``` is automatically registered, **no need to add it**.
-
 ### Register extensions
 
-The context allows you to register extension easily:
+In case of adding bundle ```FrameworkBundle``` for example, you will get an error due to missing services or parameters. 
+Indeed, when you install a bundle, you often have to add some configurations files - This is generally automatically 
+done with Flex. But... not here. No configuration is loaded and naturally the loading of added bundle will fail.
+
+That's why the context allows you to register extension easily:
 
 ```php
 /** @var \Ang3\Bundle\Test\Kernel\KernelContext $context */
@@ -146,16 +148,17 @@ $context
     ->add('my_extension', $config = []);
 ```
 
-This pack provides default configs for the Framework, the Security, Doctrine and API Platform:
+To make the life easier, this pack provides default configs for the bundles ```framework-bundle```, 
+```security-bundle```, ```doctrine-bundle``` and ```api-core``` (API platform bundle):
 
 ```php
 /** @var \Ang3\Bundle\Test\Kernel\KernelContext $context */
 $context
     ->getExtensions()
     ->addFrameworkExtension()
-    ->addSecurityExtension()
-    ->addDoctrineExtension()
-    ->addApiPlatformExtension();
+    ->addSecurityExtension() // Registers automatically the configuration of framework-bundle if missing
+    ->addDoctrineExtension() // Registers automatically the configuration of framework-bundle if missing
+    ->addApiPlatformExtension(); // Registers automatically the configuration of framework-bundle and doctrine-bundle if missing
 ```
 
 ### Private services and aliases
