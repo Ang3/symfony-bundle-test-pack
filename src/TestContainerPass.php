@@ -33,12 +33,20 @@ class TestContainerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         foreach ($this->services as $id) {
+            if(!$container->hasDefinition($id)) {
+                continue;
+            }
+
             $container
                 ->getDefinition($id)
                 ->setPublic(true);
         }
 
         foreach ($this->aliases as $id) {
+            if(!$container->hasAlias($id)) {
+                continue;
+            }
+
             $container
                 ->getAlias($id)
                 ->setPublic(true);
