@@ -66,6 +66,16 @@ class ExtensionRegistry implements \IteratorAggregate
         return $this;
     }
 
+    public function get(string $name): ?array
+    {
+        return $this->extensions[$name] ?? null;
+    }
+
+    public function has(string $name)
+    {
+        return isset($this->extensions[$name]);
+    }
+
     public function getExtensions(): array
     {
         return $this->extensions;

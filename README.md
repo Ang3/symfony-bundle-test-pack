@@ -158,8 +158,12 @@ $context
     ->addFrameworkExtension()
     ->addSecurityExtension() // Registers automatically the configuration of framework-bundle if missing
     ->addDoctrineExtension() // Registers automatically the configuration of framework-bundle if missing
-    ->addApiPlatformExtension(); // Registers automatically the configuration of framework-bundle and doctrine-bundle if missing
+    ->addApiPlatformExtension() // Registers automatically the configuration of framework-bundle and doctrine-bundle if missing
+    ->addSwiftmailerExtension(); // Registers automatically the configuration of swiftmailer-bundle
 ```
+
+If one of these bundles is added but no extension is configured for, 
+then the kernel will automatically add the default configuration for this bundle.
 
 ### Private services and aliases
 

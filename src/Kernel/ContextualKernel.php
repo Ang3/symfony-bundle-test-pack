@@ -56,12 +56,34 @@ class ContextualKernel extends Kernel
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
+        $extensions = $this->context->getExtensions();
+
         foreach ($this->context->getExtensions() as $name => $config) {
             $container->extension($name, $config);
         }
 
         if ($callback = $this->context->getContainer()) {
             $callback($container);
+        }
+
+        if($this->context->hasBundle('FrameworkBundle') && !$extensions->has('framework')) {
+            $extensions->addFrameworkExtension();
+        }
+
+        if($this->context->hasBundle('SecurityBundle') && !$extensions->has('security')) {
+            $extensions->addSecurityExtension();
+        }
+
+        if($this->context->hasBundle('DoctrineBundle') && !$extensions->has('doctrine')) {
+            $extensions->addDoctrineExtension();
+        }
+
+        if($this->context->hasBundle('ApiPlatformBundle') && !$extensions->has('api_platform')) {
+            $extensions->addApiPlatformExtension();
+        }
+
+        if($this->context->hasBundle('SwiftmailerBundle') && !$extensions->has('swiftmailer')) {
+            $extensions->addSwiftmailerExtension();
         }
     }
 
