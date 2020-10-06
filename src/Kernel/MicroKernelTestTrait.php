@@ -21,13 +21,13 @@ trait MicroKernelTestTrait
         }
     }
 
-    protected static function createKernel(array $options = []): Kernel
+    protected static function createKernel(array $options = []): ContextualKernel
     {
         $context = KernelContext::create();
         $context->addBundle(new FrameworkBundle());
         static::configureKernel($context);
 
-        return new ContextualKernel($context);
+        return $context->createKernel();
     }
 
     abstract protected static function configureKernel(KernelContext $context): void;

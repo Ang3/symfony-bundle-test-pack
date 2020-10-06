@@ -101,8 +101,10 @@ To create an isolated kernel in a test, create it directly from a context:
 ```php
 use Ang3\Bundle\Test\Kernel\ContextualKernel;
 
-$context = ContextualKernel::createContext();
-$kernel = new ContextualKernel($context);
+$kernel = ContextualKernel::createContext()
+    // Configure the context...
+    // Then create the kernel
+    ->createKernel();
 ```
 
 Working with kernel context

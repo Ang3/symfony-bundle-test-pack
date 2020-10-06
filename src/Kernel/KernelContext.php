@@ -244,4 +244,9 @@ class KernelContext
 
         return $this;
     }
+
+    public function createKernel(): ContextualKernel
+    {
+        return new ContextualKernel($this);
+    }
 }
