@@ -100,6 +100,18 @@ class ContextualKernel extends Kernel
         if ($callback = $this->context->getBuilder()) {
             $callback($container);
         }
+
+        $kernelProjectDir = $container->getParameter('kernel.project_dir');
+
+        if ($this->context->hasBundle('DoctrineBundle')) {
+            $entityDir = sprintf('%s%stests%sEntity', $kernelProjectDir, DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR);
+
+            if (!is_dir($entityDir)) {
+                $this->filesystem->mkdir($entityDir);
+            }
+
+            $container->setParameter('kernel.doctrine_entity_dir', $entityDir);
+        }
     }
 
     public function shutdown(): void

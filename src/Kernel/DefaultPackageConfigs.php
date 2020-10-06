@@ -54,7 +54,7 @@ final class DefaultPackageConfigs
                 'App' => [
                     'is_bundle' => false,
                     'type' => 'annotation',
-                    'dir' => '%kernel.project_dir%/src/Entity',
+                    'dir' => '%kernel.doctrine_entity_dir%',
                     'prefix' => 'App\Entity',
                     'alias' => 'App',
                 ],
@@ -65,7 +65,7 @@ final class DefaultPackageConfigs
     public const API_PLATFORM = [
         'mapping' => [
             'paths' => [
-                '%kernel.project_dir%/src/Entity',
+                '%kernel.doctrine_entity_dir%',
             ],
         ],
         'patch_formats' => [
