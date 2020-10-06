@@ -14,10 +14,22 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class TestContainerPass implements CompilerPassInterface
 {
+    /**
+     * @var string[]
+     */
+    private $services;
+
+    public function __construct(array $services = [])
+    {
+        $this->services = $services;
+    }
+
     public function process(ContainerBuilder $container): void
     {
-        foreach ($container->getDefinitions() as $id => $definition) {
-            $definition->setPublic(true);
+        foreach ($this->services as $id) {
+            $container
+                ->getDefinition($id)
+                ->setPublic(true);
         }
     }
 }

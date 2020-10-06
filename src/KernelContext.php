@@ -31,6 +31,16 @@ class KernelContext
      */
     private $routing;
 
+    /**
+     * @var string[]
+     */
+    private $privateServices = [];
+
+    /**
+     * @var callable|null
+     */
+    private $builder;
+
     public function __construct(string $environment = 'test', bool $debug = true)
     {
         $this->environment = $environment;
@@ -146,6 +156,43 @@ class KernelContext
     public function setRouting(?callable $routing): self
     {
         $this->routing = $routing;
+
+        return $this;
+    }
+
+    public function getPrivateServices(): array
+    {
+        return $this->privateServices;
+    }
+
+    public function setPrivateServices(array $privateServices = []): self
+    {
+        $this->privateServices = [];
+
+        foreach ($privateServices as $service) {
+            $this->setPrivateService($service);
+        }
+
+        return $this;
+    }
+
+    public function setPrivateService(string $id): self
+    {
+        if (!in_array($id, $this->privateServices)) {
+            $this->privateServices[] = $id;
+        }
+
+        return $this;
+    }
+
+    public function getBuilder(): ?callable
+    {
+        return $this->builder;
+    }
+
+    public function setBuilder(?callable $builder): self
+    {
+        $this->builder = $builder;
 
         return $this;
     }

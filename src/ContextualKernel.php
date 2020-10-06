@@ -44,18 +44,14 @@ class ContextualKernel extends Kernel
 
     public function configureRoutes(RoutingConfigurator $routeConfigurator): void
     {
-        $callback = $this->context->getRouting();
-
-        if ($callback) {
+        if ($callback = $this->context->getRouting()) {
             $callback($routeConfigurator);
         }
     }
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
-        $callback = $this->context->getContainer();
-
-        if ($callback) {
+        if ($callback = $this->context->getContainer()) {
             $callback($container);
         }
     }
@@ -63,7 +59,11 @@ class ContextualKernel extends Kernel
     protected function build(ContainerBuilder $container): void
     {
         parent::build($container);
-        $container->addCompilerPass(new TestContainerPass(), PassConfig::TYPE_OPTIMIZE);
+        $container->addCompilerPass(new TestContainerPass($this->context->getPrivateServices()), PassConfig::TYPE_OPTIMIZE);
+
+        if ($callback = $this->context->getBuilder()) {
+            $callback($container);
+        }
     }
 
     public function shutdown(): void
