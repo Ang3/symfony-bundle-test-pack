@@ -1,9 +1,10 @@
 <?php
 
-namespace Ang3\Bundle\Test\Kernel;
+namespace Ang3\Bundle\Test;
 
+use Ang3\Bundle\Test\Kernel\ContextualKernel;
+use Ang3\Bundle\Test\Kernel\KernelContext;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
-use Symfony\Component\HttpKernel\Kernel;
 
 trait MicroKernelTestTrait
 {
@@ -23,8 +24,12 @@ trait MicroKernelTestTrait
 
     protected static function createKernel(array $options = []): ContextualKernel
     {
-        $context = KernelContext::create();
-        $context->addBundle(new FrameworkBundle());
+        $context = ContextualKernel::createContext();
+        $context
+            ->addBundle(new FrameworkBundle())
+            ->getExtensions()
+            ->addFrameworkExtension();
+
         static::configureKernel($context);
 
         return $context->createKernel();
