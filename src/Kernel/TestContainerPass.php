@@ -1,6 +1,6 @@
 <?php
 
-namespace Ang3\Bundle\Test;
+namespace Ang3\Bundle\Test\Kernel;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -33,7 +33,7 @@ class TestContainerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         foreach ($this->services as $id) {
-            if(!$container->hasDefinition($id)) {
+            if (!$container->hasDefinition($id)) {
                 continue;
             }
 
@@ -43,7 +43,7 @@ class TestContainerPass implements CompilerPassInterface
         }
 
         foreach ($this->aliases as $id) {
-            if(!$container->hasAlias($id)) {
+            if (!$container->hasAlias($id)) {
                 continue;
             }
 

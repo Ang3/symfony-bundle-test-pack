@@ -1,6 +1,6 @@
 <?php
 
-namespace Ang3\Bundle\Test;
+namespace Ang3\Bundle\Test\Kernel;
 
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
@@ -20,6 +20,11 @@ class KernelContext
      * @var BundleInterface[]
      */
     private $bundles = [];
+
+    /**
+     * @var ExtensionRegistry
+     */
+    private $extensions;
 
     /**
      * @var callable|null
@@ -50,6 +55,7 @@ class KernelContext
     {
         $this->environment = $environment;
         $this->debug = $debug;
+        $this->extensions = new ExtensionRegistry();
     }
 
     public static function create(array $config = []): self
@@ -139,6 +145,18 @@ class KernelContext
     public function hasBundle(string $name): bool
     {
         return isset($this->bundles[$name]);
+    }
+
+    public function getExtensions(): ExtensionRegistry
+    {
+        return $this->extensions;
+    }
+
+    public function setExtensions(ExtensionRegistry $extensions): self
+    {
+        $this->extensions = $extensions;
+
+        return $this;
     }
 
     public function getContainer(): ?callable

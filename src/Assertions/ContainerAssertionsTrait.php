@@ -1,6 +1,6 @@
 <?php
 
-namespace Ang3\Bundle\Test;
+namespace Ang3\Bundle\Test\Assertions;
 
 trait ContainerAssertionsTrait
 {

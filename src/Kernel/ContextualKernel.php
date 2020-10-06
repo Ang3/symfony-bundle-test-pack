@@ -1,6 +1,6 @@
 <?php
 
-namespace Ang3\Bundle\Test;
+namespace Ang3\Bundle\Test\Kernel;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
@@ -56,6 +56,10 @@ class ContextualKernel extends Kernel
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
+        foreach ($this->context->getExtensions() as $name => $config) {
+            $container->extension($name, $config);
+        }
+
         if ($callback = $this->context->getContainer()) {
             $callback($container);
         }

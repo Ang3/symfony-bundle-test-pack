@@ -1,6 +1,6 @@
 <?php
 
-namespace Ang3\Bundle\Test;
+namespace Ang3\Bundle\Test\Kernel;
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\HttpKernel\Kernel;

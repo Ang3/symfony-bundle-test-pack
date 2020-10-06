@@ -2,6 +2,9 @@
 
 namespace Ang3\Bundle\Test;
 
+use Ang3\Bundle\Test\Assertions\ContainerAssertionsTrait;
+use Ang3\Bundle\Test\Kernel\MicroKernelTestTrait;
+
 trait TestCaseTrait
 {
     use ContainerAssertionsTrait;
