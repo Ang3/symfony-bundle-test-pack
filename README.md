@@ -25,6 +25,7 @@ Summary
     - [Working with kernel context](#working-with-kernel-context)
         - [Register bundles](#register-bundles)
         - [Register extensions](#register-extensions)
+        - [Define parameters](#define-parameters)
         - [Private services and aliases](#private-services-and-aliases)
         - [Configure the container](#configure-the-container)
         - [Build the container](#build-the-container)
@@ -164,6 +165,20 @@ $context
 
 If one of these bundles is added but no extension is configured for, 
 then the kernel will automatically add the default configuration for this bundle.
+
+### Define parameters
+
+You can set parameters during the container configuration like below:
+
+```php
+/** @var \Ang3\Bundle\Test\Kernel\KernelContext $context */
+$context->setParameter('app.my_parameter', 'value');
+```
+
+#### Doctrine & API Platform
+
+If you use the default Doctrine or API Platform bundle configuration, you need to set the parameter 
+```kernel.doctrine_entity_dir```.
 
 ### Private services and aliases
 

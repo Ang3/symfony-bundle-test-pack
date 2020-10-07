@@ -88,6 +88,11 @@ class ContextualKernel extends Kernel
 
             $this->loadExtensions($containerConfigurator, $missingExtensions);
         }
+
+        $containerParameters = $containerConfigurator->parameters();
+        foreach($this->context->getParameters() as $name => $value) {
+            $containerParameters->set($name, $value);
+        }
     }
 
     protected function build(ContainerBuilder $container): void
@@ -99,18 +104,6 @@ class ContextualKernel extends Kernel
 
         if ($callback = $this->context->getBuilder()) {
             $callback($container);
-        }
-
-        $kernelProjectDir = $container->getParameter('kernel.project_dir');
-
-        if ($this->context->hasBundle('DoctrineBundle')) {
-            $entityDir = sprintf('%s%stests%sEntity', $kernelProjectDir, DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR);
-
-            if (!is_dir($entityDir)) {
-                $this->filesystem->mkdir($entityDir);
-            }
-
-            $container->setParameter('kernel.doctrine_entity_dir', $entityDir);
         }
     }
 

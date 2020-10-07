@@ -3,6 +3,7 @@
 namespace Ang3\Bundle\Test\Kernel;
 
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 class KernelContext
 {
@@ -29,14 +30,9 @@ class KernelContext
     private $extensions;
 
     /**
-     * @var callable|null
+     * @var ParameterBag
      */
-    private $container;
-
-    /**
-     * @var callable|null
-     */
-    private $routing;
+    private $parameters;
 
     /**
      * @var string[]
@@ -47,6 +43,16 @@ class KernelContext
      * @var string[]
      */
     private $privateAliases = [];
+
+    /**
+     * @var callable|null
+     */
+    private $container;
+
+    /**
+     * @var callable|null
+     */
+    private $routing;
 
     /**
      * @var callable|null
@@ -87,6 +93,7 @@ class KernelContext
         }
 
         $this->extensions = new ExtensionRegistry();
+        $this->parameters = new ParameterBag();
         $this->options = array_merge($this->options, $options);
     }
 
@@ -179,28 +186,26 @@ class KernelContext
         return $this;
     }
 
-    public function getContainer(): ?callable
+    /**
+     * @param mixed $value
+     */
+    public function setParameter(string $name, $value): self
     {
-        return $this->container;
-    }
-
-    public function setContainer(?callable $container): self
-    {
-        $this->container = $container;
+        $this->parameters->set($name, $value);
 
         return $this;
     }
 
-    public function getRouting(): ?callable
+    public function removeParameter(string $name): self
     {
-        return $this->routing;
-    }
-
-    public function setRouting(?callable $routing): self
-    {
-        $this->routing = $routing;
+        $this->parameters->remove($name);
 
         return $this;
+    }
+
+    public function getParameters(): array
+    {
+        return $this->parameters->all();
     }
 
     public function getPrivateServices(): array
@@ -249,6 +254,30 @@ class KernelContext
         if (!in_array($id, $this->privateAliases)) {
             $this->privateAliases[] = $id;
         }
+
+        return $this;
+    }
+
+    public function getContainer(): ?callable
+    {
+        return $this->container;
+    }
+
+    public function setContainer(?callable $container): self
+    {
+        $this->container = $container;
+
+        return $this;
+    }
+
+    public function getRouting(): ?callable
+    {
+        return $this->routing;
+    }
+
+    public function setRouting(?callable $routing): self
+    {
+        $this->routing = $routing;
 
         return $this;
     }
