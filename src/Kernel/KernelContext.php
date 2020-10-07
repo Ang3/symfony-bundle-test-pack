@@ -2,8 +2,8 @@
 
 namespace Ang3\Bundle\Test\Kernel;
 
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 class KernelContext
 {

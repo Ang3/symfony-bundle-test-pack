@@ -90,7 +90,7 @@ class ContextualKernel extends Kernel
         }
 
         $containerParameters = $containerConfigurator->parameters();
-        foreach($this->context->getParameters() as $name => $value) {
+        foreach ($this->context->getParameters() as $name => $value) {
             $containerParameters->set($name, $value);
         }
     }
